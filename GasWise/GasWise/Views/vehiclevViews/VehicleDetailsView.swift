@@ -15,11 +15,12 @@ struct VehicleDetailsView: View {
     var body: some View {
         NavigationView {
             List {
+                Section(header: Label("Plate Number", systemImage: "number")) {
+                    PlateNumberView(vehicle: vehicle)
+                }
+                
                 VehicleInfoSection(vehicle: vehicle)
                 
-                Section(header: Label("Plate Number", systemImage: "number")) {
-                    Text(vehicle.plateNumber)
-                }
             }
             .navigationTitle("\(vehicle.name) Details")
             .navigationBarTitleDisplayMode(.inline)

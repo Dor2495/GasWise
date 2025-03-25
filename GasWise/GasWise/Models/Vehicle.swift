@@ -23,7 +23,7 @@ class Vehicle: Equatable {
     var refuelings: [Refueling] = []
     
     var tankCapacity: Double? // in liters
-    var batteryCapacity: Double?
+    var batteryCapacity: Double? // kWh
     
     // diesel or gasoline
     init(

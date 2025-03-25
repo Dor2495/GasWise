@@ -45,7 +45,7 @@ struct VehicleChartView: View {
                     AxisGridLine()
                 }
             }
-            .frame(width: UIScreen.main.bounds.width * 1.2, height: 250)
+            .frame(width: UIScreen.main.bounds.width * 1.2, height: 200)
         }
         .defaultScrollAnchor(.trailing)
         .scrollIndicators(.hidden)

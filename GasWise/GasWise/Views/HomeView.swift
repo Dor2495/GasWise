@@ -1,9 +1,3 @@
-//
-//  RefuelingListSection.swift
-//  GasWise
-//
-//  Created by Dor Mizrachi on 25/03/2025.
-//
 import SwiftUI
 import SwiftData
 import Charts
@@ -17,44 +11,56 @@ struct HomeView: View {
     @State var showAddNewCar: Bool = false
     @State var showRefuelingStatistics: Bool = true
     @State var showVehicleStatistics: Bool = true
-    @State private var selectedGasStation: GasStation?
     
+    @State private var selectedView: ViewToDisplay = .Vehicles
+
     var body: some View {
         NavigationStack {
             VStack {
                 if refuelings.isEmpty && vehicles.isEmpty {
-                    
                     EmptyDataView(showAddNewCar: $showAddNewCar)
-                    
                 } else {
-                    VStack(spacing: 20) {
+                    VStack {
+                        // **Segmented Picker**
+                        Picker("Select View", selection: $selectedView) {
+                            ForEach(ViewToDisplay.allCases) { view in
+                                Text(view.rawValue).tag(view)
+                            }
+                        }
+                        .pickerStyle(.segmented) // **Use Segmented Style**
+                        .padding(.horizontal)
+                        
+                        // **Show Vehicles or Refuelings Based on Selection**
                         List {
-                            
-                            VehicleListSection(showVehicleStatistics: $showVehicleStatistics)
-                            
-                            RefuelingListSection( showRefuelingStatistics: $showRefuelingStatistics)
-                            
+                            if selectedView == .Vehicles {
+                                VehicleListSection(showVehicleStatistics: $showVehicleStatistics)
+                            } else {
+                                RefuelingListSection(showRefuelingStatistics: $showRefuelingStatistics)
+                            }
                         }
                     }
                 }
             }
-            
             .navigationTitle("My Garage")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(alignment: .firstTextBaseline) {
-                        Button {
-                            showAddNewCar = true
-                        } label: {
-                            Image(systemName: "car.2.fill")
-                                .imageScale(.large)
-                                .foregroundStyle(.green) 
-                        }
-                        Button {
-                            showAddNewRefueling = true
-                        } label: {
-                            Image(systemName: "list.bullet.clipboard.fill")
-                                .imageScale(.large)
+                        // vehicles add button
+                        if selectedView == .Vehicles {
+                            Button {
+                                showAddNewCar = true
+                            } label: {
+                                Image(systemName: "car.2.fill")
+                                    .imageScale(.large)
+                                    .foregroundStyle(.green)
+                            }
+                        } else {
+                            Button {
+                                showAddNewRefueling = true
+                            } label: {
+                                Image(systemName: "list.bullet.clipboard.fill")
+                                    .imageScale(.large)
+                            }
                         }
                     }
                 }
@@ -66,5 +72,11 @@ struct HomeView: View {
                 AddVehicleView()
             }
         }
+    }
+    
+    enum ViewToDisplay: String, CaseIterable, Identifiable {
+        case Vehicles = "Vehicles"
+        case Refuelings = "Refuelings"
+        var id: Self { self }
     }
 }
