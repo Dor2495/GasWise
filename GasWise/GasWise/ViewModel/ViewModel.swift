@@ -1,15 +1,11 @@
 import SwiftUI
 import SwiftData
 
-class VehicleViewModel: ObservableObject {
-    private let modelContext: ModelContext
+@Observable
+class VehicleViewModel {
+    private let modelContext: ModelContext? = nill
     
-    @Published var allVehicles: [Vehicle] = []
-    
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-        fetchVehicles() // Load vehicles when initialized
-    }
+    var allVehicles: [Vehicle] = []
     
     func fetchVehicles() {
         let request = FetchDescriptor<Vehicle>(sortBy: [SortDescriptor(\.name)])
