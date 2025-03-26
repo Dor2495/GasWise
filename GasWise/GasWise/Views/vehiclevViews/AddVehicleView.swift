@@ -10,21 +10,20 @@ import SwiftData
 
 struct AddVehicleView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) private var modelContext // SwiftData context
-    
-    @EnvironmentObject private var viewModel: VehicleViewModel
+    @Environment(\.modelContext) var modelContext // SwiftData context
+    @State var viewModel = VehicleViewModel()
 
     @Query var refuelings: [Refueling]
     
-    @State private var plateNumber: String = ""
-    @State private var name: String = ""
-    @State private var make: String = ""
-    @State private var model: String = ""
-    @State private var year: String = ""
+    @State private var plateNumber: String = "55555555"
+    @State private var name: String = "dor"
+    @State private var make: String = "make"
+    @State private var model: String = "model"
+    @State private var year: String = "2020"
     @State private var fuelType: FuelType = .gasoline
-    @State private var tankCapacity: String = ""
-    @State private var batteryCapacity: String = ""
-    @State private var odometer: String = ""
+    @State private var tankCapacity: String = "90"
+    @State private var batteryCapacity: String = "90"
+    @State private var odometer: String = "0"
 
     var body: some View {
         NavigationView {
@@ -66,6 +65,10 @@ struct AddVehicleView: View {
                     TextField("Odometer (KM)", text: $odometer)
                         .keyboardType(.decimalPad)
                 }
+            }
+            
+            .onAppear {
+                viewModel.modelContext = modelContext
             }
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Add New Vehicle")

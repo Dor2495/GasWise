@@ -3,12 +3,23 @@ import SwiftData
 
 @Observable
 class VehicleViewModel {
-    private let modelContext: ModelContext? = nil
+    var modelContext: ModelContext? = nil
     
     var allVehicles: [Vehicle] = []
     
+    // MARK: Vehicle section
+    
+    func showVehicleStatistics() -> Bool {
+        for vehicle in allVehicles {
+            if vehicle.refuelings.count > 0 {
+                return true
+            }
+        }
+        return false
+    }
+    
     func fetchVehicles() {
-        let request = FetchDescriptor<Vehicle>(sortBy: [SortDescriptor(\.name)])
+        let request = FetchDescriptor<Vehicle>(sortBy: [SortDescriptor(\.id)])
         do {
             allVehicles = try modelContext?.fetch(request) ?? []
         } catch {
@@ -22,7 +33,6 @@ class VehicleViewModel {
                 modelContext?.delete(vehicle)
             }
             do {
-                objectWillChange.send()
                 try modelContext?.save()
                 fetchVehicles() // Refresh list
             } catch {
@@ -60,7 +70,6 @@ class VehicleViewModel {
         if let batteryCapacityDouble = Double(batteryCapacity ?? "00.0") {
             newVehicle.batteryCapacity = batteryCapacityDouble
         }
-        objectWillChange.send()
         modelContext?.insert(newVehicle)
         
         fetchVehicles() // Refresh list after saving
