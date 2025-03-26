@@ -3,14 +3,14 @@ import SwiftData
 
 @Observable
 class VehicleViewModel {
-    private let modelContext: ModelContext? = nill
+    private let modelContext: ModelContext? = nil
     
     var allVehicles: [Vehicle] = []
     
     func fetchVehicles() {
         let request = FetchDescriptor<Vehicle>(sortBy: [SortDescriptor(\.name)])
         do {
-            allVehicles = try modelContext.fetch(request)
+            allVehicles = try modelContext?.fetch(request) ?? []
         } catch {
             print("Failed to fetch vehicles: \(error)")
         }
@@ -19,12 +19,11 @@ class VehicleViewModel {
     func deleteVehicle(offsets: IndexSet) {
         withAnimation {
             offsets.map { allVehicles[$0] }.forEach { vehicle in
-                modelContext.delete(vehicle)
+                modelContext?.delete(vehicle)
             }
             do {
-                
                 objectWillChange.send()
-                try modelContext.save()
+                try modelContext?.save()
                 fetchVehicles() // Refresh list
             } catch {
                 print("Error saving context: \(error)")
@@ -62,9 +61,8 @@ class VehicleViewModel {
             newVehicle.batteryCapacity = batteryCapacityDouble
         }
         objectWillChange.send()
-        modelContext.insert(newVehicle)
+        modelContext?.insert(newVehicle)
         
         fetchVehicles() // Refresh list after saving
-        
     }
 }
