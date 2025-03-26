@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct VehicleListSection: View {
-    @EnvironmentObject var viewModel: VehicleViewModel
+struct VehicleListSection: View { 
+    @Environment(\.modelContext) var modelContext
+    @State var viewModel = VehicleViewModel()
 
     @Binding var showVehicleStatistics: Bool
 
@@ -14,6 +15,10 @@ struct VehicleListSection: View {
                     }
                 }
                 .onDelete(perform: viewModel.deleteVehicle)
+            }
+            .onAppear {
+                viewModel.modelContext = modelContext
+                viewModel.fetch()
             }
         }
     }
