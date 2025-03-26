@@ -6,6 +6,12 @@ import CoreLocation
 import MapKit
 
 struct ContentView: View {
+    @StateObject private var viewModel: VehicleViewModel
+    
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: VehicleViewModel(modelContext: modelContext))
+    }
+    
     @State var selectedGasStation: GasStation? = nil
     
     var body: some View {
@@ -25,9 +31,10 @@ struct ContentView: View {
                     Text("Map View")
                 }
         }
+        .environmentObject(viewModel)
     }
 }
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView()
+//}

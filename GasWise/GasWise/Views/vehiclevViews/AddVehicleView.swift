@@ -11,6 +11,9 @@ import SwiftData
 struct AddVehicleView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext // SwiftData context
+    
+    @EnvironmentObject private var viewModel: VehicleViewModel
+
     @Query var refuelings: [Refueling]
     
     @State private var plateNumber: String = ""
@@ -70,7 +73,7 @@ struct AddVehicleView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        saveVehicle()
+                        viewModel.saveVehicle(plateNumber: plateNumber, name: name, make: make, model: model, year: year, fuelType: fuelType, tankCapacity: tankCapacity, batteryCapacity: batteryCapacity, odometer: odometer)
                         // dismiss
                         dismiss()
                     } label: {
@@ -96,64 +99,64 @@ struct AddVehicleView: View {
         guard let _ = Double(tankCapacity), let _ = Double(odometer) else {
             return false
         }
-        return !name.isEmpty && !make.isEmpty && !model.isEmpty
+        return !name.isEmpty && !make.isEmpty && !model.isEmpty && !plateNumber.isEmpty
     }
 
-    enum VehicleSaveError: Error {
-        case invalidInput
-    }
-
-    func createVehicle(
-        id: String,
-        name: String,
-        make: String,
-        model: String,
-        year: String,
-        fuelType: FuelType,
-        odometer: String,
-        tankCapacity: String,
-        batteryCapacity: String?
-    ) -> Result<Vehicle, VehicleSaveError> {
-        
-        guard let odometerDouble = Double(odometer),
-              let _ = Double(tankCapacity) else {
-            return .failure(.invalidInput)
-        }
-
-        let newVehicle = Vehicle(
-            id: id,
-            name: name,
-            make: make,
-            model: model,
-            year: year,
-            fuelType: fuelType,
-            odometer: odometerDouble
-        )
-        
-        return .success(newVehicle)
-    }
-
-    func saveVehicle() {
-        let result = createVehicle(
-            id: plateNumber,
-            name: name,
-            make: make,
-            model: model,
-            year: year,
-            fuelType: fuelType,
-            odometer: odometer,
-            tankCapacity: tankCapacity,
-            batteryCapacity: batteryCapacity
-        )
-        
-        switch result {
-        case .success(let vehicle):
-            modelContext.insert(vehicle)
-            dismiss()
-        case .failure:
-            print("Failed to create vehicle")
-        }
-    }
+//    enum VehicleSaveError: Error {
+//        case invalidInput
+//    }
+//
+//    func createVehicle(
+//        id: String,
+//        name: String,
+//        make: String,
+//        model: String,
+//        year: String,
+//        fuelType: FuelType,
+//        odometer: String,
+//        tankCapacity: String,
+//        batteryCapacity: String?
+//    ) -> Result<Vehicle, VehicleSaveError> {
+//        
+//        guard let odometerDouble = Double(odometer),
+//              let _ = Double(tankCapacity) else {
+//            return .failure(.invalidInput)
+//        }
+//
+//        let newVehicle = Vehicle(
+//            id: id,
+//            name: name,
+//            make: make,
+//            model: model,
+//            year: year,
+//            fuelType: fuelType,
+//            odometer: odometerDouble
+//        )
+//        
+//        return .success(newVehicle)
+//    }
+//
+//    func saveVehicle() {
+//        let result = createVehicle(
+//            id: plateNumber,
+//            name: name,
+//            make: make,
+//            model: model,
+//            year: year,
+//            fuelType: fuelType,
+//            odometer: odometer,
+//            tankCapacity: tankCapacity,
+//            batteryCapacity: batteryCapacity
+//        )
+//        
+//        switch result {
+//        case .success(let vehicle):
+//            modelContext.insert(vehicle)
+//            dismiss()
+//        case .failure:
+//            print("Failed to create vehicle")
+//        }
+//    }
 }
 
 #Preview {

@@ -102,6 +102,7 @@ struct AddNewRefuelingView: View {
                 }
 
             }
+            .ignoresSafeArea(.keyboard)
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Fueling/Charging Information")
             .navigationBarTitleDisplayMode(.inline)

@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct GasWiseApp: App {
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -30,7 +32,7 @@ struct GasWiseApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(modelContext: modelContext)
         }
         .modelContainer(sharedModelContainer)
     }

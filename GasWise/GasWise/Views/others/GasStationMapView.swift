@@ -22,7 +22,7 @@ struct GasStationMapView: View {
     }
 }
 
-#Preview {
-    @Previewable @State var gasStation: GasStation = .init(name: "", latitude: 0, longitude: 0)
-    GasStationMapView(gasStation: gasStation)
-}
+//#Preview {
+//    @Previewable @State var gasStation: GasStation = .init(name: "", latitude: 0, longitude: 0)
+//    GasStationMapView(gasStation: gasStation)
+//}
