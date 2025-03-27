@@ -11,7 +11,8 @@ import SwiftData
 struct AddVehicleView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext // SwiftData context
-    @State var viewModel = ViewModel()
+    
+    var viewModel = ViewModel()
 
     @Query var refuelings: [Refueling]
     
@@ -66,10 +67,6 @@ struct AddVehicleView: View {
                         .keyboardType(.decimalPad)
                 }
             }
-            
-            .onAppear {
-                viewModel.modelContext = modelContext
-            }
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Add New Vehicle")
             .navigationBarTitleDisplayMode(.inline)
@@ -94,6 +91,10 @@ struct AddVehicleView: View {
                         Text("Cancel")
                     }
                 }
+            }
+            .onAppear {
+                viewModel.modelContext = modelContext
+                viewModel.fetchVehicles()
             }
         }
     }

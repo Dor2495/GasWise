@@ -12,7 +12,7 @@ import SwiftData
 struct RefuelingListSection: View {
     @Environment(\.modelContext) private var modelContext
     
-    @State private var viewModel = ViewModel()
+    @StateObject private var viewModel = ViewModel()
     
     @Binding var showRefuelingStatistics: Bool
     
@@ -31,8 +31,8 @@ struct RefuelingListSection: View {
                 }
             }
             .onDelete(perform: viewModel.deleteRefueling)
-        }
-        .onAppear {
+            
+        }.onAppear {
             viewModel.modelContext = modelContext
             viewModel.fetchRefuelings()
         }

@@ -4,7 +4,7 @@ struct VehicleListSection: View {
     @Environment(\.modelContext) var modelContext
     
     
-    @State private var viewModel = ViewModel()
+    var viewModel = ViewModel()
 
     @Binding var showVehicleStatistics: Bool
 
@@ -19,10 +19,10 @@ struct VehicleListSection: View {
                 }
             }
             .onDelete(perform: viewModel.deleteVehicle)
-        }
-        .onAppear {
-            viewModel.modelContext = modelContext
-            viewModel.fetchVehicles()
+            .onAppear {
+                viewModel.modelContext = modelContext
+                viewModel.fetchVehicles()
+            }
         }
     }
 }

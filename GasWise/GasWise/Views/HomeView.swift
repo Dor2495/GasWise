@@ -6,7 +6,7 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     
     
-    @State private var viewModel = ViewModel()
+    var viewModel = ViewModel()
     
     @State private var showAddNewRefueling: Bool = false
     @State var showAddNewCar: Bool = false

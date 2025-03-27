@@ -1,34 +1,31 @@
 import SwiftUI
 import SwiftData
 
-@Observable
-class ViewModel {
+class ViewModel: ObservableObject {
+    
     var modelContext: ModelContext? = nil
     
-    var allVehicles: [Vehicle] = []
-    
-    var allRefuelings: [Refueling] = []
+    @Published var allVehicles: [Vehicle] = []
+    @Published var allRefuelings: [Refueling] = []
 
-
-  func fetchRefuelings() {
-    let request = FetchDescriptor<Refueling>(sortBy: [SortDescriptor(\.date)])
+    func fetchRefuelings() {
+        let request = FetchDescriptor<Refueling>(sortBy: [SortDescriptor(\.date)])
         do {
             self.allRefuelings = try modelContext?.fetch(request) ?? []
         } catch {
             print("Failed to fetch refuelings: \(error)")
         }
-    
-  }
+    }
     
     func deleteRefueling(offsets: IndexSet) {
         offsets.map { allRefuelings[$0] }.forEach(modelContext!.delete)
         do {
             try modelContext!.save()
+            fetchRefuelings() // Refresh list
         } catch {
             print("Error saving context: \(error)")
         }
     }
-    
     
     // MARK: Vehicle section
     
@@ -73,7 +70,7 @@ class ViewModel {
                      tankCapacity: String?,
                      batteryCapacity: String?,
                      odometer: String) {
-        
+
         guard let odometerDouble = Double(odometer) else { return }
         
         let newVehicle = Vehicle(
@@ -95,6 +92,11 @@ class ViewModel {
         }
         modelContext?.insert(newVehicle)
         
-        fetchVehicles() // Refresh list after saving
+        do {
+            try modelContext?.save()
+            fetchVehicles() // Refresh list after saving
+        } catch {
+            print("Error saving context: \(error)")
+        }
     }
 }
