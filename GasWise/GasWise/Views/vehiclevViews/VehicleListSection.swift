@@ -2,7 +2,9 @@ import SwiftUI
 
 struct VehicleListSection: View { 
     @Environment(\.modelContext) var modelContext
-    @State var viewModel = VehicleViewModel()
+    
+    
+    @State private var viewModel = ViewModel()
 
     @Binding var showVehicleStatistics: Bool
 
@@ -22,8 +24,5 @@ struct VehicleListSection: View {
             viewModel.modelContext = modelContext
             viewModel.fetchVehicles()
         }
-        
     }
-    
-    
 }

@@ -11,7 +11,7 @@ import SwiftData
 struct AddVehicleView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext // SwiftData context
-    @State var viewModel = VehicleViewModel()
+    @State var viewModel = ViewModel()
 
     @Query var refuelings: [Refueling]
     

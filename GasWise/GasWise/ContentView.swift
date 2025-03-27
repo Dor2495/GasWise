@@ -6,6 +6,7 @@ import CoreLocation
 import MapKit
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
     
     @State var selectedGasStation: GasStation? = nil
     
@@ -19,7 +20,7 @@ struct ContentView: View {
                 .onAppear {
                     selectedGasStation = nil
                 }
-            
+
             MapView(selectedGasStation: $selectedGasStation)
                 .tabItem {
                     Image(systemName: "map")

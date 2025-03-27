@@ -2,10 +2,33 @@ import SwiftUI
 import SwiftData
 
 @Observable
-class VehicleViewModel {
+class ViewModel {
     var modelContext: ModelContext? = nil
     
     var allVehicles: [Vehicle] = []
+    
+    var allRefuelings: [Refueling] = []
+
+
+  func fetchRefuelings() {
+    let request = FetchDescriptor<Refueling>(sortBy: [SortDescriptor(\.date)])
+        do {
+            self.allRefuelings = try modelContext?.fetch(request) ?? []
+        } catch {
+            print("Failed to fetch refuelings: \(error)")
+        }
+    
+  }
+    
+    func deleteRefueling(offsets: IndexSet) {
+        offsets.map { allRefuelings[$0] }.forEach(modelContext!.delete)
+        do {
+            try modelContext!.save()
+        } catch {
+            print("Error saving context: \(error)")
+        }
+    }
+    
     
     // MARK: Vehicle section
     
@@ -21,7 +44,7 @@ class VehicleViewModel {
     func fetchVehicles() {
         let request = FetchDescriptor<Vehicle>(sortBy: [SortDescriptor(\.id)])
         do {
-            allVehicles = try modelContext?.fetch(request) ?? []
+            self.allVehicles = try modelContext?.fetch(request) ?? []
         } catch {
             print("Failed to fetch vehicles: \(error)")
         }

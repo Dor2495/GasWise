@@ -11,38 +11,43 @@ import SwiftData
 
 struct RefuelingListSection: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Refueling.date, order: .reverse) private var refuelings: [Refueling]
+    
+    @State private var viewModel = ViewModel()
     
     @Binding var showRefuelingStatistics: Bool
     
     var body: some View {
         
-        if refuelings.count > 1 {
-            RefuelingStatisticsSection(showRefuelingStatistics: $showRefuelingStatistics, refuelings: refuelings)
+        if viewModel.allRefuelings.count > 1 {
+            RefuelingStatisticsSection(showRefuelingStatistics: $showRefuelingStatistics, refuelings: viewModel.allRefuelings)
         }
         
         Section(header:
                     Label("My Refuelings", systemImage: "list.bullet")
         ) {
-            ForEach(refuelings) { refueling in
+            ForEach(viewModel.allRefuelings) { refueling in
                 NavigationLink(destination: RefuelingDetailsView(refueling: refueling)) {
                     RefuelingRowView(refueling: refueling)
                 }
             }
-            .onDelete(perform: deleteRefueling)
+            .onDelete(perform: viewModel.deleteRefueling)
+        }
+        .onAppear {
+            viewModel.modelContext = modelContext
+            viewModel.fetchRefuelings()
         }
     }
     
-    private func deleteRefueling(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { refuelings[$0] }.forEach(modelContext.delete)
-            do {
-                try modelContext.save()
-            } catch {
-                print("Error saving context: \(error)")
-            }
-        }
-    }
+//    func deleteRefueling(offsets: IndexSet) {
+//        withAnimation {
+//            offsets.map { refuelingViewModel.allRefuelings[$0] }.forEach(refuelingViewModel.modelContext!.delete)
+//            do {
+//                try refuelingViewModel.modelContext.save()
+//            } catch {
+//                print("Error saving context: \(error)")
+//            }
+//        }
+//    }
     
 }
 //
