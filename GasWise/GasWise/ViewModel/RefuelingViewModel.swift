@@ -10,7 +10,12 @@ class RefuelingViewModel {
 
 
   func fetchRefuelings() {
-    let request = 
+    let request = FetchDescriptor<Refueling>(sortBy: [SortDescriptor(\.date)])
+        do {
+            allRefuelings = try modelContext?.fetch(request) ?? []
+        } catch {
+            print("Failed to fetch refuelings: \(error)")
+        }
     
   }
 
