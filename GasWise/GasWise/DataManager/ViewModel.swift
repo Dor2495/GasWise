@@ -1,26 +1,38 @@
-//import SwiftUI
-//import SwiftData
-//
-//class ViewModel: ObservableObject {
-//    
-//    var modelContext: ModelContext? = nil
-//    
-//    @Published var allVehicles: [Vehicle] = []
-//    @Published var allRefuelings: [Refueling] = []
-//
-//    func fetchRefuelings() {
-//        let request = FetchDescriptor<Refueling>(sortBy: [SortDescriptor(\.date)])
-//        do {
-//            self.allRefuelings = try modelContext?.fetch(request) ?? []
-//        } catch {
-//            print("Failed to fetch refuelings: \(error)")
-//        }
-//    }
+import SwiftUI
+import SwiftData
+
+@MainActor
+class ViewModel: ObservableObject {
+    
+    static let container: ModelContainer = {
+        let schema = Schema([
+            Vehicle.self,
+            Refueling.self,
+            GasStation.self
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+
+        do {
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
+
+    // 2. Declare a static ModelContext derived from the container
+    static var modelContext: ModelContext {
+        container.mainContext
+    }
+    
+    // You might also want a way to provide this context to your SwiftUI views
+    static var sharedContext: ModelContext {
+        container.mainContext
+    }
 //    
 //    func deleteRefueling(offsets: IndexSet) {
-//        offsets.map { allRefuelings[$0] }.forEach(modelContext!.delete)
+//        offsets.map { allRefuelings[$0] }.forEach(ViewModel.modelContext!.delete)
 //        do {
-//            try modelContext!.save()
+//            try ViewModel.modelContext!.save()
 //            fetchRefuelings() // Refresh list
 //        } catch {
 //            print("Error saving context: \(error)")
@@ -38,19 +50,10 @@
 //        return false
 //    }
 //    
-//    func fetchVehicles() {
-//        let request = FetchDescriptor<Vehicle>(sortBy: [SortDescriptor(\.id)])
-//        do {
-//            self.allVehicles = try modelContext?.fetch(request) ?? []
-//        } catch {
-//            print("Failed to fetch vehicles: \(error)")
-//        }
-//    }
-//    
 //    func deleteVehicle(offsets: IndexSet) {
 //        withAnimation {
 //            offsets.map { allVehicles[$0] }.forEach { vehicle in
-//                modelContext?.delete(vehicle)
+//                ViewModel.modelContext?.delete(vehicle)
 //            }
 //            do {
 //                try modelContext?.save()
@@ -90,13 +93,13 @@
 //        if let batteryCapacityDouble = Double(batteryCapacity ?? "00.0") {
 //            newVehicle.batteryCapacity = batteryCapacityDouble
 //        }
-//        modelContext?.insert(newVehicle)
+//        ViewModel.modelContext?.insert(newVehicle)
 //        
 //        do {
-//            try modelContext?.save()
+//            try ViewModel.modelContext?.save()
 //            fetchVehicles() // Refresh list after saving
 //        } catch {
 //            print("Error saving context: \(error)")
 //        }
 //    }
-//}
+}

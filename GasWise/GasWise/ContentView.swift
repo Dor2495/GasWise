@@ -6,7 +6,6 @@ import CoreLocation
 import MapKit
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
     
     @State var selectedGasStation: GasStation? = nil
     

@@ -12,29 +12,28 @@ import SwiftData
 struct RefuelingListSection: View {
     @Environment(\.modelContext) private var modelContext
     
-    @StateObject private var viewModel = ViewModel()
+    @Query var allRefuelings:[Refueling]
     
     @Binding var showRefuelingStatistics: Bool
     
     var body: some View {
         
-        if viewModel.allRefuelings.count > 1 {
-            RefuelingStatisticsSection(showRefuelingStatistics: $showRefuelingStatistics, refuelings: viewModel.allRefuelings)
+        if allRefuelings.count > 0 {
+            RefuelingStatisticsSection(showRefuelingStatistics: $showRefuelingStatistics, refuelings: allRefuelings)
         }
         
         Section(header:
                     Label("My Refuelings", systemImage: "list.bullet")
         ) {
-            ForEach(viewModel.allRefuelings) { refueling in
+            ForEach(allRefuelings) { refueling in
                 NavigationLink(destination: RefuelingDetailsView(refueling: refueling)) {
                     RefuelingRowView(refueling: refueling)
                 }
             }
-            .onDelete(perform: viewModel.deleteRefueling)
+//            .onDelete(perform: viewModel.deleteRefueling)
             
         }.onAppear {
-            viewModel.modelContext = modelContext
-            viewModel.fetchRefuelings()
+            print("RefuelingListSection.appear")
         }
     }
     

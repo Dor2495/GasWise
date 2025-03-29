@@ -5,6 +5,9 @@ import Charts
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     
+    @Query var allRefuelings: [Refueling]
+    @Query var allVehicles: [Vehicle]
+    
     
     var viewModel = ViewModel()
     
@@ -18,7 +21,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.allRefuelings.isEmpty && viewModel.allVehicles.isEmpty {
+                if allRefuelings.isEmpty && allVehicles.isEmpty {
                     EmptyDataView(showAddNewCar: $showAddNewCar)
                 } else {
                     VStack {

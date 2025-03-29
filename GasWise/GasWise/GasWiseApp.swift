@@ -10,22 +10,22 @@ import SwiftData
 
 @main
 struct GasWiseApp: App {
-    @Environment(\.dismiss) var dismiss
-    
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Refueling.self,
-            GasStation.self,
-            Vehicle.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+//    @Environment(\.dismiss) var dismiss
+//    
+//    var sharedModelContainer: ModelContainer = {
+//        let schema = Schema([
+//            Refueling.self,
+//            GasStation.self,
+//            Vehicle.self
+//        ])
+//        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+//
+//        do {
+//            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+//        } catch {
+//            fatalError("Could not create ModelContainer: \(error)")
+//        }
+//    }()
 
     
     
@@ -33,6 +33,6 @@ struct GasWiseApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(ViewModel.container)
     }
 }

@@ -1,27 +1,27 @@
 import SwiftUI
+import SwiftData
 
-struct VehicleListSection: View { 
+struct VehicleListSection: View {
     @Environment(\.modelContext) var modelContext
-    
+    @Query var allVehicles: [Vehicle]
     
     var viewModel = ViewModel()
 
     @Binding var showVehicleStatistics: Bool
 
     var body: some View {
-        if viewModel.showVehicleStatistics() {
-            VehicleChartView(vehicles: viewModel.allVehicles)
+        if allVehicles.count > 0 {
+            VehicleChartView(vehicles: allVehicles)
         }
         Section(header: Label("My Cars", systemImage: "list.bullet")) {
-            ForEach(viewModel.allVehicles) { vehicle in
+            ForEach(allVehicles) { vehicle in
                 NavigationLink(destination: VehicleDetailsView(vehicle: vehicle)) {
                     VehicleRowView(vehicle: vehicle)
                 }
             }
-            .onDelete(perform: viewModel.deleteVehicle)
+//            .onDelete(perform: viewModel.deleteVehicle)
             .onAppear {
-                viewModel.modelContext = modelContext
-                viewModel.fetchVehicles()
+                print("VehicleListSection.appear")
             }
         }
     }
