@@ -1,8 +1,22 @@
 import SwiftUI
 
+/// A detailed view for displaying comprehensive information about a refueling event.
+///
+/// `RefuelingDetailsView` provides a complete breakdown of a refueling record including:
+/// - Vehicle information
+/// - Date and time details
+/// - Fuel/energy amounts and costs
+/// - Gas station information (if available)
+/// - Performance statistics
+/// - User notes
+///
+/// The view adapts its content based on the vehicle's fuel type, showing relevant
+/// sections for conventional, electric, or hybrid vehicles.
 struct RefuelingDetailsView: View {
+    /// The refueling record to display details for.
     var refueling: Refueling
 
+    /// The body of the RefuelingDetailsView defining its UI.
     var body: some View {
         NavigationView {
             List {
@@ -130,12 +144,21 @@ struct RefuelingDetailsView: View {
     }
 }
 
-
+/// A reusable row component for the refueling details view.
+///
+/// This view provides a consistent layout for displaying labeled information
+/// with an icon in the refueling details list.
 struct RefuelingDetailRow: View {
+    /// The SF Symbol name for the row's icon.
     let icon: String
+    
+    /// The label text describing the data being displayed.
     let label: String
+    
+    /// The value to display for this data point.
     let value: String
 
+    /// The body of the RefuelingDetailRow defining its UI.
     var body: some View {
         HStack {
             Image(systemName: icon)

@@ -8,10 +8,23 @@
 import SwiftUI
 import SwiftData
 
+/// A detailed view for displaying comprehensive information about a vehicle.
+///
+/// `VehicleDetailsView` presents a complete overview of a vehicle's information including:
+/// - Basic vehicle specifications (make, model, year)
+/// - Fuel/energy capacity details
+/// - Current odometer reading
+/// - License plate information
+///
+/// This view acts as a central hub for accessing all information related to a specific vehicle.
 struct VehicleDetailsView: View {
+    /// Query to retrieve all refueling records related to this vehicle.
     @Query private var refuelings: [Refueling]
+    
+    /// The vehicle to display details for.
     var vehicle: Vehicle
 
+    /// The body of the VehicleDetailsView defining its UI.
     var body: some View {
         NavigationView {
             List {
@@ -27,9 +40,15 @@ struct VehicleDetailsView: View {
     }
 }
 
+/// A section that displays basic vehicle information in a grouped format.
+///
+/// This component encapsulates all essential vehicle specifications in a
+/// consistent layout pattern, improving code organization and reusability.
 struct VehicleInfoSection: View {
+    /// The vehicle whose information is being displayed.
     let vehicle: Vehicle
 
+    /// The body of the VehicleInfoSection defining its UI.
     var body: some View {
         Section(header: Label("Vehicle Info", systemImage: "car.fill")) {
             VehicleDetailRow(label: "Name", value: vehicle.name)
@@ -48,10 +67,18 @@ struct VehicleInfoSection: View {
     }
 }
 
+/// A reusable row component for displaying vehicle details.
+///
+/// This view provides a consistent layout for each data point in the vehicle details list,
+/// with the label on the left and the corresponding value on the right.
 struct VehicleDetailRow: View {
+    /// The label describing the data being displayed.
     let label: String
+    
+    /// The value to display for this data point.
     let value: String
 
+    /// The body of the VehicleDetailRow defining its UI.
     var body: some View {
         HStack {
             Text(label + ":")

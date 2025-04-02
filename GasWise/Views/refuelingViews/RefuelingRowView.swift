@@ -7,8 +7,28 @@
 
 import SwiftUI
 
+/// A row component for displaying summary information about a refueling event.
+///
+/// `RefuelingRowView` provides a compact presentation of a refueling record designed
+/// for use in lists. It displays key information including:
+/// - Vehicle name
+/// - Refueling date and time
+/// - Fuel amount or energy (depending on vehicle type)
+/// - Fuel type
+/// - Total cost
+///
+/// This view adapts its content based on the type of refueling (conventional,
+/// electric, or hybrid) to show the most relevant information.
 struct RefuelingRowView: View {
+    /// The refueling record to display.
     @Bindable var refueling: Refueling
+    
+    /// Date formatter for consistent display of refueling dates.
+    ///
+    /// This computed property configures a date formatter that shows
+    /// both date and time in a user-friendly format.
+    ///
+    /// - Returns: A configured DateFormatter instance.
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -16,6 +36,7 @@ struct RefuelingRowView: View {
         return formatter
     }
 
+    /// The body of the RefuelingRowView defining its UI.
     var body: some View {
         HStack {
             VStack(alignment: .leading) {

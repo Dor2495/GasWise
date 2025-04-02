@@ -8,25 +8,59 @@
 import SwiftUI
 import SwiftData
 
+/// A view for adding a new vehicle to the GasWise application.
+///
+/// `AddVehicleView` provides a form-based interface allowing users to input
+/// all necessary information to create a new vehicle record, including:
+/// - Basic vehicle identification (plate number, name)
+/// - Vehicle specifications (make, model, year)
+/// - Fuel type and capacity details
+/// - Current odometer reading
+///
+/// The view adapts dynamically based on the selected fuel type, showing
+/// relevant input fields for conventional, electric, or hybrid vehicles.
 struct AddVehicleView: View {
+    /// Environment variable for dismissing the view.
     @Environment(\.dismiss) var dismiss
     
+    /// Callback function used when saving a new vehicle.
     var saveVehicle: ((Vehicle) -> Void)?
     
+    /// Initializes the add vehicle view with an optional save callback.
+    ///
+    /// - Parameter saveVehicle: Optional callback function executed when a new vehicle is saved
     init(saveVehicle: ((Vehicle) -> Void)? = nil) {
         self.saveVehicle = saveVehicle
     }
     
+    /// Vehicle license plate number.
     @State private var plateNumber: String = ""
+    
+    /// User-defined name for the vehicle.
     @State private var name: String = ""
+    
+    /// Manufacturer of the vehicle.
     @State private var make: String = ""
+    
+    /// Specific model of the vehicle.
     @State private var model: String = ""
+    
+    /// Manufacturing year of the vehicle.
     @State private var year: String = ""
+    
+    /// Type of fuel used by the vehicle.
     @State private var fuelType: FuelType = .gasoline
+    
+    /// Fuel tank capacity in liters (for gasoline/diesel/hybrid vehicles).
     @State private var tankCapacity: String = ""
+    
+    /// Battery capacity in kilowatt-hours (for electric/hybrid vehicles).
     @State private var batteryCapacity: String = ""
+    
+    /// Current odometer reading in kilometers.
     @State private var odometer: String = ""
 
+    /// The body of the AddVehicleView defining its UI.
     var body: some View {
         NavigationView {
             
@@ -96,6 +130,13 @@ struct AddVehicleView: View {
         }
     }
     
+    /// Validates if the form data is complete and correctly formatted.
+    ///
+    /// This computed property checks required fields to ensure:
+    /// - Numeric values can be converted to Double
+    /// - Text fields are not empty
+    ///
+    /// - Returns: A Boolean indicating if the form is valid and can be submitted.
     private var isFormValid: Bool {
         guard let _ = Double(tankCapacity), let _ = Double(odometer) else {
             return false
@@ -103,6 +144,11 @@ struct AddVehicleView: View {
         return !name.isEmpty && !make.isEmpty && !model.isEmpty
     }
 
+    /// Creates a new Vehicle object from the form data and calls the save callback.
+    ///
+    /// This method validates critical numeric fields, creates a Vehicle instance
+    /// with the appropriate properties based on form input, and then triggers
+    /// the save callback to persist the new vehicle.
     func createVehicle() {
         
         guard let odometerDouble = Double(odometer),
