@@ -1,3 +1,5 @@
+deve;opment in progress...
+
 # GasWise
 The **GasWise** app is designed to help users track their vehicle expenses related to charging and fueling. This repository is developed using Swift and is publicly accessible. Here are some key details about the project:
 
